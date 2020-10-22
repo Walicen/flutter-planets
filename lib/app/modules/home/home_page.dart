@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:planets/app/config/theme/colors.dart';
 import 'package:planets/app/models/planets_model.dart';
 import 'package:planets/app/shared/app_bar_custom.dart';
+
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,11 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       backgroundColor: secondaryColor,
       body: SafeArea(
@@ -57,15 +55,15 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 ],
               ),
             )),
-            Container(
-              child: FloatingActionButton(
-                  child: Icon(Icons.add),
-                  foregroundColor: secondaryColor,
-                  backgroundColor: primaryColor,
-                  onPressed: () {
-                    print('Connect Tap Button');
-                  }),
-            )
+            // Container(
+            //   child: FloatingActionButton(
+            //       child: Icon(Icons.add),
+            //       foregroundColor: secondaryColor,
+            //       backgroundColor: primaryColor,
+            //       onPressed: () {
+            //         print('Connect Tap Button');
+            //       }),
+            // )
           ],
         ),
       ),

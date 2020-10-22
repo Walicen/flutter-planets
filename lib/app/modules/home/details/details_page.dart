@@ -7,6 +7,9 @@ import 'package:planets/app/shared/app_bar_custom.dart';
 import 'package:planets/app/shared/widgets/fade_animation.dart';
 
 import 'details_controller.dart';
+import 'widgets/list_item_planet.dart';
+import 'widgets/rouded_clipper.dart';
+import 'widgets/text_attribute.dart';
 
 class DetailsPage extends StatefulWidget {
   final String title;
@@ -35,19 +38,11 @@ class _DetailsPageState extends ModularState<DetailsPage, DetailsController> wit
 
   @override
   Widget build(BuildContext context) {
+    final planet = widget.planet;
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
     const textStyle = TextStyle(color: tertiaryColor, fontWeight: FontWeight.w300);
-
-    const radius = '3,389.5 km';
-    const d_sun = '227.9 min km';
-    const moons = 'Phobos, Deimos';
-    const gravity = '3.711 m/s²';
-    const tilt_axis = '25º';
-    const length_year = '687 earth days';
-    const length_day = '24 h 37 min';
-    const temp = 'Average -62.78 ºC';
 
     final HomeController homeController = Modular.get<HomeController>();
 
@@ -72,14 +67,14 @@ class _DetailsPageState extends ModularState<DetailsPage, DetailsController> wit
                             FadeAnimation(
                               delay: 1.5,
                               child: Text(
-                                widget.planet.name,
+                                planet.name,
                                 style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 5, fontSize: 25),
                               ),
                             ),
                             FadeAnimation(
                               delay: 0.8,
                               child: Text(
-                                widget.planet.nickName,
+                                planet.nickName,
                                 style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 5, fontSize: 35),
                               ),
                             ),
@@ -87,7 +82,7 @@ class _DetailsPageState extends ModularState<DetailsPage, DetailsController> wit
                         ),
                         Container(
                           child: Image.asset(
-                            widget.planet.image,
+                            planet.image,
                             width: width * 0.6,
                             height: width * 0.6,
                           ),
@@ -99,7 +94,7 @@ class _DetailsPageState extends ModularState<DetailsPage, DetailsController> wit
                 ),
                 AppBarCustom(
                   invertedColor: true,
-                  leftText: "#${widget.planet.id}",
+                  leftText: "#${planet.id}",
                 ),
               ],
             ),
@@ -119,15 +114,31 @@ class _DetailsPageState extends ModularState<DetailsPage, DetailsController> wit
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextAttribute(textStyle: textStyle, attribute: d_sun, description: 'Distance from Sun'),
-                              TextAttribute(textStyle: textStyle, attribute: radius, description: "Radius"),
-                              TextAttribute(textStyle: textStyle, attribute: moons, description: "Moons"),
-                              TextAttribute(textStyle: textStyle, attribute: gravity, description: "Gravity"),
-                              TextAttribute(textStyle: textStyle, attribute: tilt_axis, description: "Tilt of Axis"),
                               TextAttribute(
-                                  textStyle: textStyle, attribute: length_year, description: "Length of Year"),
-                              TextAttribute(textStyle: textStyle, attribute: length_day, description: "Length of Day"),
-                              TextAttribute(textStyle: textStyle, attribute: temp, description: "Temperature"),
+                                  textStyle: textStyle,
+                                  attribute: planet.distanceFromSun ?? '',
+                                  description: 'Distance from Sun'),
+                              TextAttribute(
+                                  textStyle: textStyle, attribute: planet.radius ?? '', description: "Radius"),
+                              TextAttribute(textStyle: textStyle, attribute: planet.moons ?? '', description: "Moons"),
+                              TextAttribute(
+                                  textStyle: textStyle, attribute: planet.gravity ?? '', description: "Gravity"),
+                              TextAttribute(
+                                  textStyle: textStyle,
+                                  attribute: planet.tiltOfAxis ?? '',
+                                  description: "Tilt of Axis"),
+                              TextAttribute(
+                                  textStyle: textStyle,
+                                  attribute: planet.lengthOfYear ?? '',
+                                  description: "Length of Year"),
+                              TextAttribute(
+                                  textStyle: textStyle,
+                                  attribute: planet.lengthOfDay ?? '',
+                                  description: "Length of Day"),
+                              TextAttribute(
+                                  textStyle: textStyle,
+                                  attribute: planet.temperature ?? '',
+                                  description: "Temperature"),
                             ],
                           ),
                         ),
@@ -228,60 +239,4 @@ class _DetailsPageState extends ModularState<DetailsPage, DetailsController> wit
       ),
     );
   }
-}
-
-class TextAttribute extends StatelessWidget {
-  const TextAttribute({
-    Key key,
-    @required this.textStyle,
-    @required this.description,
-    @required this.attribute,
-  }) : super(key: key);
-
-  final TextStyle textStyle;
-  final String description;
-  final String attribute;
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-          text: '$description: ',
-          style: textStyle,
-          children: [TextSpan(text: attribute, style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold))]),
-    );
-  }
-}
-
-class ListItemPlanet extends StatelessWidget {
-  final AssetImage image;
-
-  const ListItemPlanet({
-    Key key,
-    @required this.image,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 100,
-      child: Center(child: Image(image: image)),
-    );
-  }
-}
-
-class RoundedClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0.0, size.height - 100);
-    path.quadraticBezierTo(size.width / 2, size.height + 100, size.width, size.height - 100);
-    path.lineTo(size.width, 0.0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => this != oldClipper;
 }
